@@ -2,7 +2,7 @@ import fs from "fs"
 import { RulesParser } from "./lib/rules_parser"
 import { ScheduleBuilder } from "./lib/schedule_builder"
 import { Template } from "./lib/template"
-
+import { generate } from "./lib/screenshot";
 
 function main(targetDate: string|undefined) {
   const json = fs.readFileSync("/dev/stdin", 'utf8')
@@ -11,7 +11,13 @@ function main(targetDate: string|undefined) {
   const rules = RulesParser.parse(events.Rules)
   const schedules = ScheduleBuilder.build(rules, targetDate)
   const template = Template.build(schedules)
+
   console.log(template)
+
+  // Add: make screen shot
+  generate(template).then((_) => {
+    return;
+  });
 }
 
 main(process.argv[2])
